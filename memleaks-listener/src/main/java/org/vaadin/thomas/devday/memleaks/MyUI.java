@@ -2,10 +2,12 @@ package org.vaadin.thomas.devday.memleaks;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.shared.Registration;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -20,20 +22,34 @@ import com.vaadin.ui.VerticalLayout;
  * initialize non-component functionality.
  */
 @Theme("mytheme")
+@Push
 public class MyUI extends UI {
 
 	private static final long serialVersionUID = -8454408720814290815L;
+	private Button button;
+	private Registration registration;
 
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
 		final VerticalLayout layout = new VerticalLayout();
 
-		final Button button = new Button("Click Me");
+		button = new Button("Count is: ");
 		button.addClickListener(e -> openHoggerWindow());
 
 		layout.addComponents(button);
 
 		setContent(layout);
+
+		registration = PushNotifier.addRegistration(c -> updatePopup(c));
+	}
+
+	@Override
+	public void close() {
+		registration.remove();
+	}
+
+	private void updatePopup(int count) {
+		getUI().access(() -> button.setCaption("Count is: " + count));
 	}
 
 	private void openHoggerWindow() {
