@@ -1,7 +1,6 @@
 package org.vaadin.thomas.devday.memleaks;
 
 import javax.enterprise.inject.spi.CDI;
-import javax.inject.Inject;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.cdi.CDIUI;
@@ -25,9 +24,6 @@ public class MyUI extends UI {
 
 	private static final long serialVersionUID = -8454408720814290815L;
 
-	@Inject
-	private HoggerWindow w;
-
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
 		final VerticalLayout layout = new VerticalLayout();
@@ -42,11 +38,12 @@ public class MyUI extends UI {
 
 	private void openHoggerWindow() {
 
-		w.close();
-
-		// We could inject it, but we might need many
+		// We could inject it, but we might need multiple instances
 		final HoggerWindow window = CDI.current().select(HoggerWindow.class).get();
 		getUI().addWindow(window);
+
+		// window is now a CDI managed bean. It might not be cleared properly,
+		// depending on where you create it from
 	}
 
 }

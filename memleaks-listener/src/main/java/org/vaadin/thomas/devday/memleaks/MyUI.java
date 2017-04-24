@@ -40,13 +40,19 @@ public class MyUI extends UI {
 
 		setContent(layout);
 
-		registration = PushNotifier.addRegistration(c -> updatePopup(c));
+		registration = PushNotifierService.addRegistration(c -> updatePopup(c));
 	}
 
 	@Override
 	public void close() {
 		registration.remove();
 	}
+
+	// @Override
+	// public void detach() {
+	// super.detach();
+	// registration.remove();
+	// }
 
 	private void updatePopup(int count) {
 		getUI().access(() -> button.setCaption("Count is: " + count));

@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 import com.vaadin.shared.Registration;
 
-public class PushNotifier {
+public class PushNotifierService {
 
 	public interface PushListener {
 		public void countUpdated(int newCount);
@@ -18,6 +18,8 @@ public class PushNotifier {
 	private static Object lock = new Object();
 
 	private static final List<PushListener> listeners = new ArrayList<>();
+	// private static final Map<PushListener, ?> listeners = new
+	// WeakHashMap<>();
 
 	static {
 
@@ -33,6 +35,7 @@ public class PushNotifier {
 						counter++;
 					}
 
+					// listeners.keySet().forEach(r -> r.countUpdated(counter));
 					listeners.forEach(r -> r.countUpdated(counter));
 
 					Thread.sleep(1000);
@@ -45,6 +48,7 @@ public class PushNotifier {
 	}
 
 	public static Registration addRegistration(PushListener listener) {
+		// listeners.put(listener, null);
 		listeners.add(listener);
 
 		return () -> {
