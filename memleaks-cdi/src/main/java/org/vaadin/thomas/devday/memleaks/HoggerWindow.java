@@ -3,7 +3,9 @@ package org.vaadin.thomas.devday.memleaks;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Window;
@@ -13,7 +15,11 @@ public class HoggerWindow extends Window {
 
 	private static final long serialVersionUID = -1859991693920652434L;
 
-	public HoggerWindow() {
+	@Inject
+	private DummyEJB ejb;
+
+	@PostConstruct
+	public void init() {
 
 		final List<DataHogger> list = new ArrayList<>();
 		for (int i = 0; i < 10; i++) {
@@ -25,10 +31,11 @@ public class HoggerWindow extends Window {
 		grid.setSizeFull();
 		setContent(grid);
 
-		setCaption("Data!");
+		setCaption(ejb.getString());
 		center();
 		setHeight("60%");
 		setWidth("600px");
 		setModal(true);
 	}
+
 }
