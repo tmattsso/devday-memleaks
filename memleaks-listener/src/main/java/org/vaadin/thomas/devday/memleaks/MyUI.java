@@ -43,10 +43,10 @@ public class MyUI extends UI {
 		registration = PushNotifierService.addRegistration(c -> updatePopup(c));
 	}
 
-	@Override
-	public void close() {
-		registration.remove();
-	}
+	// @Override
+	// public void close() {
+	// registration.remove();
+	// }
 
 	// @Override
 	// public void detach() {

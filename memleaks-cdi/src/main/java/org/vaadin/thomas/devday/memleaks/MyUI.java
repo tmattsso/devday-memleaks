@@ -1,5 +1,6 @@
 package org.vaadin.thomas.devday.memleaks;
 
+import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.CDI;
 
 import com.vaadin.annotations.Theme;
@@ -39,11 +40,14 @@ public class MyUI extends UI {
 	private void openHoggerWindow() {
 
 		// We could inject it, but we might need multiple instances
-		final HoggerWindow window = CDI.current().select(HoggerWindow.class).get();
+		final Instance<HoggerWindow> windowFactory = CDI.current().select(HoggerWindow.class);
+		final HoggerWindow window = windowFactory.get();
 		getUI().addWindow(window);
 
 		// window is now a CDI managed bean. It might not be cleared properly,
-		// depending on where you create it from
+		// depending on where you create it from.
+
+		// window.addCloseListener(e -> windowFactory.destroy(window));
 	}
 
 }
