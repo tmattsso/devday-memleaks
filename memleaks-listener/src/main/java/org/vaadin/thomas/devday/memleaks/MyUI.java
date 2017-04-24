@@ -8,7 +8,7 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.shared.Registration;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
@@ -26,20 +26,20 @@ import com.vaadin.ui.VerticalLayout;
 public class MyUI extends UI {
 
 	private static final long serialVersionUID = -8454408720814290815L;
-	private Button button;
+
 	private Registration registration;
+	private Label label;
 
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
 		final VerticalLayout layout = new VerticalLayout();
 
-		button = new Button("Count is: ");
-		button.addClickListener(e -> openHoggerWindow());
-
-		layout.addComponents(button);
+		label = new Label("Count is: ");
+		layout.addComponents(label);
 
 		setContent(layout);
 
+		// Register for updates
 		registration = PushNotifierService.addRegistration(c -> updatePopup(c));
 	}
 
@@ -55,11 +55,7 @@ public class MyUI extends UI {
 	// }
 
 	private void updatePopup(int count) {
-		getUI().access(() -> button.setCaption("Count is: " + count));
-	}
-
-	private void openHoggerWindow() {
-		getUI().addWindow(new HoggerWindow());
+		getUI().access(() -> label.setValue("Count is: " + count));
 	}
 
 	@WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)

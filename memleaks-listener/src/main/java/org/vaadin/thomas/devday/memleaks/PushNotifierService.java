@@ -2,6 +2,7 @@ package org.vaadin.thomas.devday.memleaks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -35,10 +36,10 @@ public class PushNotifierService {
 						counter++;
 					}
 
-					// listeners.keySet().forEach(r -> r.countUpdated(counter));
 					listeners.forEach(r -> r.countUpdated(counter));
 
-					Thread.sleep(1000);
+					// random, 1-5 seconds
+					Thread.sleep(new Random().nextInt(4) * 1000 + 1000);
 				}
 			} catch (final InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -48,7 +49,6 @@ public class PushNotifierService {
 	}
 
 	public static Registration addRegistration(PushListener listener) {
-		// listeners.put(listener, null);
 		listeners.add(listener);
 
 		return () -> {
