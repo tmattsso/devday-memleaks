@@ -49,14 +49,15 @@ http://localhost:8080/memleaks-cdi-0.0.1-SNAPSHOT/
 same as first example, except we use CDI to create a Window when we need it. We use the recommended way to programmatically create CDI beans.
 open JProfiler, and stop memory recording. Go to Telemetry->memory and do a GC.
 now, when you open windows and close them, most of the memory is still allocated, even after CG. open and close the window a few times to demonstrate.
+
+open JProfiler, start memory recording, go to browser, open a window, close the window. JProfiler should show the HoggerWindow reference that shouldn't be there.
+just do the same thing as before, but on the HoggerWindow object; it leads to CDI (Weld is Wildflys CDI implementation) this time, which isn't as straightforward as in the previous example, but gives us a hint that there is an issue with CDI. So, usually a scope issue, double check your annotations and how you create the bean.
+
 As you might have guessed, we are using CDI wrong and it doesn't dispose of the windows.
 
 show the code, where we use CDI.getCurrent.select() to get an Instance reference, that we use to create the Windows.
 This is normally fine, because the Window is @Dependent, and uses the same scope as the UI. 
-But, as you can see in the code, we refer to an EJB in the window. This messes CDI up, and it can't automatically release the Window anymore.
-So, we need to destroy the reference ourselves, the code is commented out.
-before that though, let's take a look if JProfiler can help us. It can!
+But, as you can see in the code, we refer to an EJB in the window. This messes CDI up, and it can't automatically release the Window anymore. So, even though it should work, it doesn't.
+So, we need to destroy the reference ourselves, the code is commented out in the UI class.
 
-open the UI, start memory recording, open a window, close the window. JProfiler should show the HoggerWindow reference.
-just do the same thing as before; it leads to CDI (Weld is Wildflys CDI implementation) this time, which isn't as straightforward as in the previous example, but gives us a hint that there is an issue with CDI. So, usually a scope issue, double check your annotations and how you create the bean.
 
