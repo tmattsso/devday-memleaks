@@ -43,6 +43,10 @@ public class MyUI extends UI {
 		registration = PushNotifierService.addRegistration(c -> updatePopup(c));
 	}
 
+	private void updatePopup(int count) {
+		getUI().access(() -> label.setValue("Count is: " + count));
+	}
+
 	// @Override
 	// public void close() {
 	// registration.remove();
@@ -53,10 +57,6 @@ public class MyUI extends UI {
 	// super.detach();
 	// registration.remove();
 	// }
-
-	private void updatePopup(int count) {
-		getUI().access(() -> label.setValue("Count is: " + count));
-	}
 
 	@WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
 	@VaadinServletConfiguration(ui = MyUI.class, productionMode = false)

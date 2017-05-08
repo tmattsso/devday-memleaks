@@ -11,17 +11,21 @@
 demo:
 
 deploy all apps in wildfly 10, open http://localhost:8080/memleaks-0.0.1-SNAPSHOT/
-show the button, say that the window generates 100 MB of String data for testing purposes.
+show the button, say that the window generates 10 MB of String data for testing purposes.
 open JProfiler, attach to wildfly. open the memory telemetry view that shows total JVM memory.
-Run GC from Jprofiler to get a clean slate. the memory should drop quite a bit; the JVM is lazy with GC if it doesn't need more memory
-click the button, and show how the memory usage jumps. close it, run gc, and it drops back.
+Run GC from Jprofiler to get a clean slate. the memory should drop quite a bit; the JVM is lazy with GC if it doesn't need more memory.
+click the button in the browser, and show how the memory usage jumps. close it, run gc, and it drops back.
 this is what we want; when we remove a vaadin component from the ui (and all refs), it is GC:d.
 
 switch jprofiler to memory -> allocated objects, and start recording. 
 refresh the browser twice.
 filter the allocation (bottom bar) with e.g. 'thomas', showing our objects
-not that there is two UIs there; we refreshed twice, so that's as it should be. 
+note that there are two UIs there; we refreshed twice, so that's as it should be. 
 run GC, and one of them should go away. stop recording.
+
+
+
+
 
 time for the first demo; listener. open http://localhost:8080/memleaks-listener-0.0.1-SNAPSHOT/
 the demo is a UI that receives irregular updates from the backend and updates the UI with Push.
@@ -43,6 +47,10 @@ so, options? both close() and detach() are options (commented out).
 also, the service could use a weak reference. show that too.
 the service could be whatever; in this case, it's static so the list is never cleaned by GC
 this is of course a very straightforward example; the same problem will occur when storing a reference to ANY vaadin component from outside the Vaadin app.
+
+
+
+
 
 Time for a less straightforward example; CDI
 http://localhost:8080/memleaks-cdi-0.0.1-SNAPSHOT/
