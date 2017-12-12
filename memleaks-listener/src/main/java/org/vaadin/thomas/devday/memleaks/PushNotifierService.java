@@ -16,7 +16,7 @@ public class PushNotifierService {
 	}
 
 	private static volatile int counter = 0;
-	private static Object lock = new Object();
+	private static final Object lock = new Object();
 
 	private static final List<PushListener> listeners = new ArrayList<>();
 	// private static final Map<PushListener, ?> listeners = new
