@@ -44,7 +44,9 @@ public class MyUI extends UI {
 	}
 
 	private void updatePopup(int count) {
-		getUI().access(() -> label.setValue("Count is: " + count));
+		if (getUI().isAttached()) {
+			getUI().access(() -> label.setValue("Count is: " + count));
+		}
 	}
 
 	// @Override
